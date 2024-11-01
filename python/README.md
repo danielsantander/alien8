@@ -4,6 +4,11 @@
 - [Regular Expressions](#regular-expressions)
   - [match vs search](#match-vs-search)
   - [findall vs finditer](#findall-vs-finditer)
+  - [Lookaheads And Lookbehinds](#lookaheads-and-lookbehinds)
+    - [Look Ahead Positive (?=)](#look-ahead-positive-)
+    - [Look ahead negative (?!)](#look-ahead-negative-)
+    - [Look behind positive (?\<=)](#look-behind-positive-)
+    - [Look behind negative (?\<!)](#look-behind-negative-)
 - [Libraries](#libraries)
   - [scapy](#scapy)
 - [Tips](#tips)
@@ -122,12 +127,46 @@ re.findall( r'all (.*?) are', 'all cats are smarter than dogs, all dogs are dumb
 # => ['all cats are', 'all dogs are']
 ```
 
+## Lookaheads And Lookbehinds
+
+Given the string `foobarbarfoo`:
+
+```text
+bar(?=bar)     finds the 1st bar ("bar" which has "bar" after it)
+bar(?!bar)     finds the 2nd bar ("bar" which does not have "bar" after it)
+(?<=foo)bar    finds the 1st bar ("bar" which has "foo" before it)
+(?<!foo)bar    finds the 2nd bar ("bar" which does not have "foo" before it)
+```
+
+You can also combine them:
+
+```text
+(?<=foo)bar(?=bar)    finds the 1st bar ("bar" with "foo" before it and "bar" after it)
+```
+
+### Look Ahead Positive (?=)
+
+Find expression A where expression B follows: `A(?=B)`
+
+### Look ahead negative (?!)
+
+Find expression A where expression B does not follow: `A(?!B)`
+
+### Look behind positive (?<=)
+
+Find expression A where expression B precedes: `(?<=B)A`
+
+### Look behind negative (?<!)
+
+Find expression A where expression B does not precede: `(?<!B)A`
+
 ---
 
 Python RegEx Sources:
 
 - [findall() vs finditer()](https://stackoverflow.com/a/4697884/14745606)
 - [match() vs search()](https://testdriven.io/tips/421e050b-176b-4a72-a8b5-6ad5f185b86a/#:~:text=match%20in%20Python%3F-,re.,matches%20anywhere%20in%20the%20string.)
+- [Lookaheads And Lookbehinds](https://stackoverflow.com/a/2973495/14745606)
 
 # Libraries
 
