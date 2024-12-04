@@ -74,7 +74,7 @@ EVERYTHING YOU NEED TO KNOW, AND MORE
     - [Show Current Databse](#show-current-databse)
     - [Connect to Database](#connect-to-database)
     - [List Users](#list-users)
-    - [Set Password](#set-password)
+    - [Set MySQL Password For User](#set-mysql-password-for-user)
     - [SHOW Data](#show-data)
     - [SELECT Data](#select-data)
     - [INSERT Data](#insert-data)
@@ -92,7 +92,7 @@ EVERYTHING YOU NEED TO KNOW, AND MORE
   - [PostgreSQL](#postgresql)
     - [Create Database](#create-database)
     - [Create User](#create-user)
-    - [Set Password](#set-password-1)
+    - [Set PSQL Password For User](#set-psql-password-for-user)
     - [Associate User with Database](#associate-user-with-database)
     - [Drop Tables](#drop-tables)
     - [Truncate Table](#truncate-table)
@@ -289,8 +289,8 @@ passwd ubuntu
 
 # update sshd_config file to allow password authenticatio
 sudo vi /etc/ssh/sshd_config
-# Find the line with the PasswordAuthentication parameter and change its value from no to yes 
-# If you want to set up root login, find the PermitRootLogin parameter and change its value from prohibit-password to yes 
+# Find the line with the PasswordAuthentication parameter and change its value from no to yes
+# If you want to set up root login, find the PermitRootLogin parameter and change its value from prohibit-password to yes
 
 # restart ssh service
 sudo service ssh restart
@@ -1187,7 +1187,7 @@ USE {database_name}
 SELECT user, host, password FROM mysql.user;
 ```
 
-### Set Password
+### Set MySQL Password For User
 
 ```sql
 -- set password for root user
@@ -1459,7 +1459,7 @@ CREATE DATABASE {DB_NAME};
 /usr/local/opt/postgres/bin/createuser -s {USERNAME}
 ```
 
-### Set Password
+### Set PSQL Password For User
 
 ```sql
 \password {USERNAME}
