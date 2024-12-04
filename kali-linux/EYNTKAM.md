@@ -230,7 +230,7 @@ ssh-keygen -t rsa
 # use -b option to specify length (in bit size)
 ssh-keygen -b 2048 -t rsa
 
-# verify ssh key and  passphrase, if successfull it will show you the associated public key else display "load failed".
+# verify ssh key and  passphrase, if successful it will show you the associated public key else display "load failed".
 ssh-keygen -y -f .ssh/id_rsa
 ```
 
