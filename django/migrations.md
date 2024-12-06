@@ -7,7 +7,9 @@ Initial migrations are made for an app and create the first version of the app's
 When `migrate --fake-initial` option is used, the initial migrations are treaded specially. Django checks that all tables already exist in the database and fake-applies the migration if so. Without `--fake-initial`, initial migrations are treated no differently from any other migration.
 
 # Make Migrations
+
 Run `makemigrations` command for Django to write a new set of migrations.
+
 ```shell
 python3 manage.py makemigrations
 
@@ -16,6 +18,7 @@ python3 manage.py makemigrations <app_name>
 ```
 
 Apply the newly added migrations with the `migrate` command.
+
 ```shell
 python3 manage.py migrate
 
@@ -24,9 +27,9 @@ python3 manage.py migrate <app_name>
 ```
 
 # Reverse Migrations
-Reverse migrations by passing the migration number of the previous migration.
 
-Example: reverse to migration post.0005
+Reverse migrations by passing the migration number of the previous migration. Example, reverse to migration post.0005
+
 ```shell
 python3 manage.py migrate post 0005
   Target specific migration: 0005_auto, from blogs
@@ -35,7 +38,8 @@ Running migrations:
   Unapplying post.0006_auto... OK
 ```
 
-Revers **all** migrations applied for an app with the `zero` argument
+Revers **all** migrations applied for an app with the `zero` argument.
+
 ```shell
 python3 manage.py migrate blog zero
 Operations to perform:
@@ -47,31 +51,38 @@ Running migrations:
 ```
 
 # Remove Tables/Migrations in PostgreSQL Database
+
 Access database: `psql -U <username> <database>`
 
 List Tables
+
 ```sql
 \pset pager off
 \dt
 ```
 
 List Django Migration Records:
+
 ```sql
 SELECT * FROM django_migrations;
 ```
 
 Delete migration table rows for given app:
+
 ```sql
 DELETE FROM django_migrations WHERE app='<app_name>';
 ```
 
 Drop A Whole Table:
+
 ```sql
 DROP TABLE <tablename>;
 ```
 
 # Find Migration Files
+
 Find and delete migration files for an app that are not named `__init__.py`.
+
 ```shell
 find src/app_directory/migrations -type f -not -name "__init__.py" -delete
 ```

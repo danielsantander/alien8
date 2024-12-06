@@ -66,25 +66,32 @@ django-admin createsuperuser
 ```
 
 # Migrations
+
 ## Create Empty Migration
+
 ```shell
 python3 manage.py makemigrations {APP_NAME} --name {MIGRATION_FILENAME} --empty
 ```
 
 ## Run Migrations
+
 Create migrations.
+
 ```shell
 python3 manage.py makemigrations
 python3 manage.py migrate
 ```
 
 ## Reverse All Migrations For An App
+
 ```shell
 python3 manage.py migrate {APP_NAME} zero
 ```
 
 # Install Apps
+
 Add apps within `INSTALLED_APP` list in settings:
+
 ```python
 INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
@@ -121,7 +128,9 @@ python3 manange.py test [test_label [test_label ...]]
 ```
 
 #  Django Shell
+
 ## Get Django User Model
+
 ```python
 from django.contrib.auth.models import User
 
@@ -129,16 +138,39 @@ from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 ```
 
- # Django Sessions
+## Print Object in JSON format
+
+```python
+import json
+from django.core import serializers
+
+# Get your object
+my_object = MyModel.objects.get(pk=1)
+
+# Serialize the object to JSON
+json_data = serializers.serialize('json', [my_object])
+
+# Load the JSON data into a Python dictionary
+data = json.loads(json_data)
+
+# Print the JSON data
+print(json.dumps(data, indent=4))
+```
+
+# Django Sessions
+
 The Django session framework supports anonymous and user sessions, which allows storage of arbitrary data for each visitor. Session data is stored on  the server side, and cookies contain the session ID unless the cookie-based session engine is used.
 
 To use sessions, ensure that the `MIDDLEWARE` settings contains:
+
 ```python
 'django.contrib.sessions.middleware.SessionMiddleware'
 ```
+
 > it is added by default when creating a new project using the `startproject` command.
 
 Access the current session from the request object using `request.session`
+
 ```python
 # set a variable in the session
 request.session['foo'] =  'bar'
@@ -151,7 +183,9 @@ del request.session['foo']
 ```
 
 ## Session settings
+
 Customize sessions with specific settings such as:
+
 - `SESSION_COOKIE_AGE`: The duration of session cookies in seconds. The default value is 1209600 (two weeks)
 - `SESSION_COOKIE_DOMAIN`: The domain used for session cookies. Set this to mydomain.com to enable cross-domain cookies or use None for standard domain cookies.
 - `SESSION_COOKIE_SECURE`: A boolean indicating that the cookie should only be sent if the connection is an HTTPS connection
@@ -162,6 +196,7 @@ Customize sessions with specific settings such as:
 
 
 # Integrate Redis into Project
+
 Update settings.py file:
 ```python
 ```
