@@ -917,7 +917,7 @@ A free and open-source Web server software created by American software develope
 apt-get install apache2
 
 # start server -- once started, the default web page can be accessed at http://localhost/
-sudo services apache2 start
+sudo service apache2 start
 ```
 
 ### Configure Web Server
