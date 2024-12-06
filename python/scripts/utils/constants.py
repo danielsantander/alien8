@@ -25,17 +25,17 @@ VIDEO_EXTENSION_LIST: List[str] = ["mp4", "gifv", "gif"]
 # IMG_XXXX.jpg | Screen Shot YYYY-MM-DD at HH.MM.SS AM|PM.png
 RE_APPLE_SCREEN_SHOT = r'^((?P<phone_screenshot>IMG\_(?P<image_id>\d+))|(?P<mac_screenshot>Screen\sShot\s(?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})\sat\s(?P<time>[0-9]{1,2}.[0-9]{2}.[0-9]{2})\s(?P<meridiem>[A|P]M)))([-|_](?P<category>[^-]*)-?)?.*\.(?P<extension>\w*)$'
 
+# Screen Shot YYYY-MM-DD at HH.MM.SS AM|PM.png
+RE_MAC_OS_SCREENSHOT = r'^Screen\sShot\s(?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})\sat\s(?P<time>[0-9]{1,2}.[0-9]{2}.[0-9]{2})\s(?P<meridiem>[A|P]M)\.(?P<extension>\w*)$'
+
 RE_FILE_EXTENSION = r'\.(?P<extension>\w+$)'
 
 # IMG_XXXX.jpg
-RE_IPHONE_SCREEN_SHOT = r'^IMG\_(?P<image_id>\d+\s?(?P<dupe>\d)?)(?P<extension>\.\w*)$'
+RE_IPHONE_SCREENSHOT = r'^IMG\_(?P<image_id>\d+\s?(?P<dupe>\d)?)(?P<extension>\.\w*)$'
 
 # IPv4
 # RE_IP_ADDRESS = r'^(?P<address>(?:\d+\.)+\d+)(\/(?P<subnet_mask_cidr>\d+))?$'
 RE_IP_ADDRESS = r'^(?P<ip_address>(?:\d+\.)+\d+)(?:\:(?P<port>\d+))?(?:\/(?P<subnet_mask_cidr>\d+))?$'
-
-# Screen Shot YYYY-MM-DD at HH.MM.SS AM|PM.png
-RE_MAC_OS_SCREEN_SHOT = r'^Screen\sShot\s(?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})\sat\s(?P<time>[0-9]{1,2}.[0-9]{2}.[0-9]{2})\s(?P<meridiem>[A|P]M)(?P<extension>\.png)$'
 
 # YYYY-MM-DD HH:MM:SS w/ grouping of: year month, date
 RE_NASA_IMG_DATES = "^(?P<year>\d{4})-(?P<month>\d{1,2})-(?P<date>\d{1,2}).*$"

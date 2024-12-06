@@ -12,7 +12,7 @@ import sys
 import threading
 import time
 from pathlib import Path
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, Optional
 
 DEBUG_MODE : bool = False
 DEFAULT_USER : str = 'root'
@@ -28,9 +28,9 @@ DEFAULT_PASSWORD : str = 'fairbanks'
 HEX_FILTER = ''.join(
     [(len(repr(chr(i))) == 3) and chr(i) or '.' for i in range(256)])
 
-def setup_logger(name:str=None, use_verbose:bool=DEBUG_MODE):
+def setup_logger(name:Optional[str]=None, use_verbose:bool=DEBUG_MODE):
     """
-    Setup console logger
+    Setup and return a console logger.
     """
     lgr_lvl = logging.DEBUG if use_verbose else logging.INFO
     lgr_fmt = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
@@ -55,7 +55,7 @@ class IP:
     mypacket = IP(buff)
     print (f'{mypacket.src_address} -> {mypacket.dst_address}')
     """
-    def __init__(self,buff=None):
+    def __init__(self, buff):
         # first char '<' specifies endianness of the data (order of bytes within binary number)
         # B -> 1-byte unsigned char
         # H -> 2-byte unsigned short
@@ -63,7 +63,7 @@ class IP:
         header = struct.unpack('<BBHHHBBH4s4s', buff)
 
         # With first byte of header data:
-        # - assign version variable the high-order nybble by right-shifting the byte by four places (prepending four 9s to the front)
+        # - assign version variable (self.ver) the high-order nybble by right-shifting the byte by four places (prepending four 9s to the front)
         # - assign hdrlen variable (self.ihl) the lower-order nybble (last 4 bits of byte) by Using boolean AND with 0xF (00001111) - replacing first 4 bits with 0.
         self.ver = header[0] >> 4
         self.ihl = header[0] & 0xF
@@ -121,8 +121,8 @@ class IP_CTYPE(Structure):
         ("src",          c_uint32, 32),   # 4 byte unsigned int
         ("dst",          c_uint32, 32)    # 4 byte unsigned int
     ]
-    def _new_ (cls, socket_buffer=None):
-        return cls.from_buffer_copy(socket_buffer)
+    def _new_ (self, socket_buffer):
+        return self.from_buffer_copy(socket_buffer)
 
     def __init__(self, socket_buffer=None):
         # human readable IP addresses
@@ -145,7 +145,7 @@ class ICMP:
         self.seq = header[4]
 
 class Scanner:
-    def __init__(self, host:str=None, subnet:str=None, verbose_mode:bool=False, **kwargs):
+    def __init__(self, host:Optional[str]=None, subnet:Optional[str]=None, verbose_mode:bool=False, **kwargs):
         self.logger = kwargs.get('logger') or setup_logger("Scanner", verbose_mode)
         self.host = get_ip_address() if host is None else host
         self.subnet = get_subnet(self.host) if subnet is None else subnet
@@ -262,7 +262,7 @@ def get_ip_address()->str:
         ip_address = socket.gethostbyname(hostname)
     return ip_address
 
-def get_subnet(host:str=None, subnet_mask:str="255.255.255.0"):
+def get_subnet(host:Optional[str]=None, subnet_mask:str="255.255.255.0"):
     """
     Retrieve subnet given host and a subnet mask. For example, given subnet of 255.255.255.0, return value is 192.178.2.0/24
 
@@ -329,7 +329,7 @@ def mail_sniffer():
                 print(f"[*] {str(packet[TCP].payload)}")        # actual data bytes of the packet
     packet_sniffer(clb=packet_callback, bpf=bpf_common_mail_ports)
 
-def packet_sniffer(clb=None, bpf:str=None, count:int=None):
+def packet_sniffer(clb=None, bpf:Optional[str]=None, count:Optional[int]=None):
     from scapy.all import sniff
     """
     Uses scapy to sniff packets.
@@ -359,7 +359,7 @@ def packet_sniffer(clb=None, bpf:str=None, count:int=None):
         params["store"] = 0     # ensure packets are not kept in memory. (Good to use when running sniffer for long-term, so will not be consuming as much RAM)
     sniff(**params)
 
-def scan_port(ip_address:str, port:int, timeout:int=None, send_packet:bool=False, **kwargs)->Tuple[str,bool,str]:
+def scan_port(ip_address:str, port:int, timeout:Optional[int]=None, send_packet:bool=False, **kwargs)->Tuple[str,bool,str]:
     """
     Makes socket connection to port.
 
@@ -371,7 +371,7 @@ def scan_port(ip_address:str, port:int, timeout:int=None, send_packet:bool=False
     """
     ip_address = socket.gethostbyname(socket.gethostname()) if ip_address is None else ip_address
     packet = b"\x47\x45\x54\x20\x2f\x20\x48\x54\x54\x50\x2f\x31\x2e\x30\x2e\x2e\x2e\x2e"
-    results: Tuple[str,bool,str] = ()
+    results: Tuple[str,bool,str] = (f"{ip_address}:{port}", False, "")
     try:
         # create socket object with:
         #  - AF_INET     -> using standard IPv4 address or hostname
@@ -391,12 +391,11 @@ def scan_port(ip_address:str, port:int, timeout:int=None, send_packet:bool=False
         except Exception as err:
             # print (f"port {port} is open.")
             s.close()
-            results = (f"{ip_address}:{port}",True,None)
+            results = (f"{ip_address}:{port}", True, "")
             kwargs.get("results", []).append(results)   # for threading purposes
     except:
-        # print (f"port is closed.")
         # print (f"port {port} is closed.")
-        results = (f"{ip_address}:{port}",False,None)
+        results = (f"{ip_address}:{port}", False, "")
         kwargs.get("results", []).append(results)   # for threading purposes
     return results
 
