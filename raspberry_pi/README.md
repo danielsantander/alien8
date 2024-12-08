@@ -4,7 +4,7 @@
 - [View OS Info](#view-os-info)
 - [compress/uncompress](#compressuncompress)
 - [cron](#cron)
-  - [Mounting/Unmounting Devices](#mountingunmounting-devices)
+- [Mounting/Unmounting Devices](#mountingunmounting-devices)
 - [Install Software](#install-software)
   - [Docker](#docker)
     - [Troubleshoot](#troubleshoot)
@@ -67,7 +67,7 @@ gunzip data.tar.gz
 
 `/etc/crontab` is the system wide crontab, whereas `crontab -e` is per user. Specify which user with `crontab -e -u <username>`
 
-## Mounting/Unmounting Devices
+# Mounting/Unmounting Devices
 
 Mount points -- locations in the directory tree where the devices area attached to. Two main mount points in Linux are:
 
