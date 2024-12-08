@@ -2357,7 +2357,7 @@ NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 
 A storage device must be both physically and logically attached to the filesystem for the data to be available to the operating system.
 
-Mount pionts are locations in the directory tree where the devices area attached to. Two main mount opints in Linux are:
+Mount points are locations in the directory tree where the devices area attached to. Two main mount points in Linux are:
 
 1. `/mnt`: Usually used to mount internal hard drives.
 2. `/media`: Usually used to mount external USB devices (flash drives) and external USB hard drives.

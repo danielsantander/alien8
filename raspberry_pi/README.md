@@ -2,7 +2,9 @@
 - [Download Raspberry Pi OS](#download-raspberry-pi-os)
 - [Update and Upgrade System](#update-and-upgrade-system)
 - [View OS Info](#view-os-info)
+- [compress/uncompress](#compressuncompress)
 - [cron](#cron)
+  - [Mounting/Unmounting Devices](#mountingunmounting-devices)
 - [Install Software](#install-software)
   - [Docker](#docker)
     - [Troubleshoot](#troubleshoot)
@@ -41,9 +43,46 @@ uname -m
 # - armv7l (for 32 bit)
 ```
 
+# compress/uncompress
+
+```shell
+# compress directory of data into a tar
+tar -cvf archive.tar data/
+
+# compress into gzip
+tar -czvf archive.tar.gz data/
+
+# extract files from tarball
+tar -xvf archive.tar
+
+# compress using gzip -- data.tar -> data.tar.gz
+gzip data.tar
+
+# decompress tar.gz and .tgz files -- data.tar.gz -> data.tar
+gunzip data.tar.gz
+
+```
+
 # cron
 
 `/etc/crontab` is the system wide crontab, whereas `crontab -e` is per user. Specify which user with `crontab -e -u <username>`
+
+## Mounting/Unmounting Devices
+
+Mount points -- locations in the directory tree where the devices area attached to. Two main mount points in Linux are:
+
+1. `/mnt`: Usually used to mount internal hard drives.
+2. `/media`: Usually used to mount external USB devices (flash drives) and external USB hard drives.
+
+> Can not unmount a device that is busy, that is if the system is busy reading or writing data to the storage device.
+
+```shell
+# mount a `sbd1` hard drive to the `/mnt` directory, to access its content
+mount /dev/sdb1 /mnt
+
+# unmount
+unmount {file_entry_of_device}
+```
 
 # Install Software
 
