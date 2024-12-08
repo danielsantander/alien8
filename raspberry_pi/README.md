@@ -1,16 +1,17 @@
 *Table of Contents*
 - [Download Raspberry Pi OS](#download-raspberry-pi-os)
-  - [View OS](#view-os)
-  - [Check Linux Version](#check-linux-version)
-  - [View Bit Size](#view-bit-size)
 - [Update and Upgrade System](#update-and-upgrade-system)
-- [Disable or Extend Sleep on Raspberry Pi](#disable-or-extend-sleep-on-raspberry-pi)
-- [Install Docker](#install-docker)
-  - [Troubleshoot](#troubleshoot)
-- [Install Picamera](#install-picamera)
+- [View OS Info](#view-os-info)
+- [cron](#cron)
+- [Install Software](#install-software)
+  - [Docker](#docker)
+    - [Troubleshoot](#troubleshoot)
+  - [Picamera](#picamera)
 - [raspi-config](#raspi-config)
   - [Boot Raspberry Pi to Desktop GUI](#boot-raspberry-pi-to-desktop-gui)
   - [Disable Screen Blanking](#disable-screen-blanking)
+- [Tips](#tips)
+  - [Disable or Extend Sleep on Raspberry Pi](#disable-or-extend-sleep-on-raspberry-pi)
 
 ---
 
@@ -18,46 +19,35 @@
 
 Download Raspberry Pi Operating Systems here: https://www.raspberrypi.com/software/operating-systems/
 
-## View OS
+# Update and Upgrade System
 
 ```shell
+sudo apt-get update && sudo apt-get upgrade -y
+```
+
+# View OS Info
+
+```shell
+# view os
 cat /etc/os-release
-```
 
-## Check Linux Version
-
-```shell
+# check linux version
 lsb_release -a
-```
 
-## View Bit Size
-
-```shell
+# view bit size
 uname -m
 # Output Expected:
 # - aarch64 (for 64 bit)
 # - armv7l (for 32 bit)
 ```
 
-# Update and Upgrade System
+# cron
 
-```shell
-sudo apt-get update && sudo apt-get upgrade
-```
+`/etc/crontab` is the system wide crontab, whereas `crontab -e` is per user. Specify which user with `crontab -e -u <username>`
 
-# Disable or Extend Sleep on Raspberry Pi
+# Install Software
 
-[source](https://stackoverflow.com/a/54239349/14745606)
-
-Update `consoleblank` (a kernel parameter). In order to be permanently set, it needs to be defined on the kernel command line.
-
-```shell
-# view current console blanking settings
-cat /sys/module/kernel/parameters/consoleblank
-0
-```
-
-# Install Docker
+## Docker
 
 [Docker Docs Source](https://docs.docker.com/desktop/install/debian/)
 
@@ -72,7 +62,7 @@ sudo systemctl enable --now docker
 sudo docker run --rm hello-world
 ```
 
-## Troubleshoot
+### Troubleshoot
 
 ```shell
 # Check status
@@ -86,7 +76,7 @@ sudo reboot
 sudo systemctl start docker
 ```
 
-# Install Picamera
+## Picamera
 
 - [source](https://picamera.readthedocs.io/en/release-1.13/install.html)
 
@@ -94,11 +84,8 @@ sudo systemctl start docker
 # Check if installed (if no errors, it's already installed).
 python -c "import picamera"
 python3 -c "import picamera"
-```
 
-Install
-
-```shell
+# Install
 sudo apt-get update
 sudo apt-get install python-picamera python3-picamera
 
@@ -147,4 +134,18 @@ sudo raspi-config
 
 # update configuration through interface
 sudo reboot
+```
+
+# Tips
+
+## Disable or Extend Sleep on Raspberry Pi
+
+[source](https://stackoverflow.com/a/54239349/14745606)
+
+Update `consoleblank` (a kernel parameter). In order to be permanently set, it needs to be defined on the kernel command line.
+
+```shell
+# view current console blanking settings
+cat /sys/module/kernel/parameters/consoleblank
+0
 ```
