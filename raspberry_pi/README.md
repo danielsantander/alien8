@@ -78,10 +78,10 @@ Mount points -- locations in the directory tree where the devices area attached 
 
 ```shell
 # mount a `sbd1` hard drive to the `/mnt` directory, to access its content
-mount /dev/sdb1 /mnt
+mount /dev/sda1 /media/pi/
 
 # unmount
-unmount {file_entry_of_device}
+umount /media/pi/USB
 ```
 
 # Install Software

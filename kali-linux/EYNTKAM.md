@@ -159,7 +159,7 @@ EVERYTHING YOU NEED TO KNOW, AND MORE
   - [Partitions](#partitions)
   - [List Block Devices (lsblk)](#list-block-devices-lsblk)
   - [Mounting Devices (mount)](#mounting-devices-mount)
-  - [Unmounting Devices (unmount)](#unmounting-devices-unmount)
+  - [Unmounting Devices (umount)](#unmounting-devices-umount)
   - [Filesystem Checks](#filesystem-checks)
 - [Logging](#logging)
   - [Configuration](#configuration)
@@ -2364,21 +2364,21 @@ Mount points are locations in the directory tree where the devices area attached
 
 > The filesystems that are mounted on a system are kept in a file at `/etc/fstab/` (filesystem table) which is read by the system at every bootup.
 
-Example of mouning hard drive.
+Example of mounting hard drive.
 
 ```shell
 # mount a sbd1 hard drive to the /mnt directory, to access its content
 mount /dev/sdb1 /mnt
 ```
 
-## Unmounting Devices (unmount)
+## Unmounting Devices (umount)
 
 "Eject" a device to keep from causing damage to the files stored on the device.
-> Can not unmount a device that is busy, that is if the system is busy reading or writing data to the storage device.
+> Can not umount a device that is busy, that is if the system is busy reading or writing data to the storage device.
 
 ```shell
 # usage:
-unmount {file_entry_of_device}
+umount {file_entry_of_device}
 ```
 
 ## Filesystem Checks
