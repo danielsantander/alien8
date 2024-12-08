@@ -7,18 +7,16 @@ import logging.handlers
 import os
 from typing import Optional, Union
 from pathlib import Path
-from utils import navigation
+from utils import constants, navigation
 
 DEBUG_MODE: bool = True
 CUR_DIR = os.path.abspath(os.path.dirname(__file__)) # utils/
 # LOG_DIR = os.path.join(CUR_DIR, "logs", "") # utils/logs/
 LOG_DIR = Path(CUR_DIR) / 'logs'    # utils/logs
 LOG_LEVEL: int = logging.DEBUG if DEBUG_MODE else logging.INFO
-LOG_FORMAT_STR = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-LOG_FORMAT = logging.Formatter(LOG_FORMAT_STR)
 
 
-def create_console_logger(name:Optional[str]=None, level:int=LOG_LEVEL, format:Union[str, logging.Formatter]=LOG_FORMAT) -> logging.Logger:
+def create_console_logger(name:Optional[str]=None, level:int=LOG_LEVEL, format:Union[str, logging.Formatter]=constants.DEFAULT_LOG_FORMAT) -> logging.Logger:
     """
     Return a custom logger with stream (console) handler.
     """
@@ -31,7 +29,7 @@ def create_console_logger(name:Optional[str]=None, level:int=LOG_LEVEL, format:U
     logger.setLevel(level)
     return logger
 
-def create_logger(name:str, level:int=LOG_LEVEL, log_dir:Union[str,Path]=LOG_DIR, max_byte_size:int=10*1024*1024, backup_count:int=5, format:Union[str, logging.Formatter]=LOG_FORMAT) -> logging.Logger:
+def create_logger(name:str, level:int=LOG_LEVEL, log_dir:Union[str,Path]=LOG_DIR, max_byte_size:int=10*1024*1024, backup_count:int=5, format:Union[str, logging.Formatter]=constants.DEFAULT_LOG_FORMAT) -> logging.Logger:
     """
     Return logger with Stream and RotatingFile handlers.
     Creates log directory if one does not exist, and initializes a master_logger file.

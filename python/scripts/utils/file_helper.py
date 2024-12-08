@@ -6,6 +6,7 @@ import json
 import re
 import os
 import platform
+import requests
 import sys
 from pathlib import Path
 from typing import Union, List
@@ -116,6 +117,39 @@ def encrypt_pdf(path: Union[str,Path], pw:str='', outpath:Path=None)->Path:
     except OSError as err:
         raise err
 
+def extract_media_from_url(url:str, filename:Path, request_timeout:int=120, headers:dict={}):
+    parent_dir = filename.parent
+    if not parent_dir.exists(): parent_dir.mkdir(parents=True, exist_ok=True)
+    assert parent_dir.exists() and parent_dir.is_dir()
+    s = requests.session()
+    chunk_size = 256
+    file_stat_info = None
+    is_success = False
+    try:
+        resp = s.get(url=url, stream=True, timeout=request_timeout, headers=headers)
+        print (f"extract_media_from_url resp ({resp.status_code}): {resp.url}")
+        resp.raise_for_status()
+        with open(filename, 'wb') as sf:
+            for chunk in resp.iter_content(chunk_size=chunk_size):
+                sf.write(chunk)
+        assert filename.exists()
+        file_stat_info = os.stat(filename.resolve())
+        if filename.exists() and resp.ok: is_success = True
+        else:
+            is_success = False
+            print (f"extract_media_from_url -- unable to save media {filename.name} from {url}")
+    except requests.exceptions.HTTPError as err:
+        if '400 Client Error' in err.__str__():
+            print (f"extract_media_from_url -- 400 Client Error -- {err.__str__()}")
+        elif '404' in err.__str__():
+            print (f"extract_media_from_url -- Media not found -- {err.__str__()}")
+        else:
+            print (f"extract_media_from_url -- Unknown Error -- {err.__str__()}")
+        is_success = False
+        file_stat_info = None
+    return is_success, file_stat_info
+
+
 def file_creation_date(filename:Union[str, Path], timezone=datetime.timezone.utc, use_timestamp:bool=False)->datetime.datetime:
     """
     Returns datetime of file creation date.
@@ -146,6 +180,7 @@ def file_creation_date(filename:Union[str, Path], timezone=datetime.timezone.utc
     if use_timestamp: return file_timestamp
     return datetime.datetime.fromtimestamp(file_timestamp, tz=timezone)
 
+
 def file_modification_date(filename: Union[str, Path], timezone=datetime.timezone.utc)->datetime.datetime:
     """
     Returns datetime of file modification date.
@@ -160,6 +195,7 @@ def file_modification_date(filename: Union[str, Path], timezone=datetime.timezon
     path_to_file = filename.resolve()
     t = os.path.getmtime(path_to_file)  # os.stat(filename).st_mtime
     return datetime.datetime.fromtimestamp(t, tz=timezone)
+
 
 def get_recently_created_files(directory_path:Path, within_hrs:int=24)->list[Path]:
     """
@@ -179,10 +215,12 @@ def get_recently_created_files(directory_path:Path, within_hrs:int=24)->list[Pat
             results.append(file)
     return results
 
+
 def is_file_recently_created(p:Path, within_hrs:int=24)->bool:
     now = datetime.datetime.utcnow()
     created_date = file_creation_date(p)
     return bool(now-datetime.timedelta(hours=within_hrs) <= created_date <= now+datetime.timedelta(hours=within_hrs)) if created_date else False
+
 
 def iterate_directory(directory_path:Union[str,Path], excludeHiddenFiles:bool=True, raise_exception:bool=True)->List[Path]:
     """
@@ -215,6 +253,7 @@ def open_json_from_file(filepath:Union[str,Path]):
         data = json.load(f)
     return data
 
+
 def rename_path(path:Union[str, Path], new_name:Union[str, Path], overwrite:bool=False)->Path:
     """Renames (moves) a directory or file path given a new name.
     If renaming a directory, new_name must be a directory Path object or a string name else NotADirectoryError is raised.
@@ -243,6 +282,7 @@ def rename_path(path:Union[str, Path], new_name:Union[str, Path], overwrite:bool
         raise err
     return path
 
+
 def write_json_to_file(filename:Union[str,Path], dic_obj:dict):
     """ Write dictionary object to file as JSON.
 
@@ -259,4 +299,3 @@ def write_json_to_file(filename:Union[str,Path], dic_obj:dict):
     with open(p.absolute(), "w") as f:
         # json.dump(dict, f, indent=2)  # should work as well
         f.write(json.dumps(dic_obj, indent=2))
-
